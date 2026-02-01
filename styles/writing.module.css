@@ -1,0 +1,310 @@
+/* ===== Writing List Page ===== */
+.writingContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.header {
+  margin-bottom: 1rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.articlesList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.articleItem {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(232, 232, 232, 0.08);
+}
+
+.articleItem:last-child {
+  border-bottom: none;
+}
+
+.articleLink {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.articleTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  text-decoration: none;
+  cursor: pointer;
+  transition: text-decoration 0.2s ease;
+}
+
+.articleLink:hover .articleTitle {
+  text-decoration: underline;
+}
+
+.articleDate {
+  font-size: 0.875rem;
+  color: rgba(232, 232, 232, 0.55);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  margin: 2rem 0;
+}
+
+.emptyState h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.emptyState p {
+  font-size: 1rem;
+  color: rgba(232, 232, 232, 0.6);
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.emptyStateHint {
+  font-size: 0.875rem;
+  color: rgba(232, 232, 232, 0.4);
+  margin-bottom: 0;
+}
+
+/* ===== Article Detail Page ===== */
+.articleContainer {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-block;
+  font-size: 0.875rem;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: var(--space-lg);
+  transition: opacity 0.2s ease;
+}
+
+.backLink:hover {
+  opacity: 1;
+}
+
+.articleHeader {
+  margin-bottom: var(--space-lg);
+}
+
+.articleHeader h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+}
+
+.articleMeta {
+  font-size: 0.95rem;
+  color: rgba(232, 232, 232, 0.6);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: var(--space-lg) 0;
+}
+
+.articleContent {
+  color: var(--foreground);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.articleContent p {
+  margin-bottom: 1.75rem;
+}
+
+.articleContent h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.articleContent h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.articleContent h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.articleContent strong,
+.articleContent b {
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.articleContent em,
+.articleContent i {
+  font-style: italic;
+  color: rgba(232, 232, 232, 0.95);
+}
+
+.articleContent ul,
+.articleContent ol {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
+
+.articleContent li {
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.articleContent ul li {
+  list-style-type: disc;
+}
+
+.articleContent ol li {
+  list-style-type: decimal;
+}
+
+.articleContent a {
+  color: rgba(232, 232, 232, 0.8);
+  text-decoration: underline;
+  text-decoration-color: rgba(232, 232, 232, 0.4);
+  transition: text-decoration-color 0.2s ease;
+}
+
+.articleContent a:hover {
+  text-decoration-color: rgba(232, 232, 232, 0.8);
+}
+
+.articleContent code {
+  background-color: rgba(232, 232, 232, 0.08);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.95em;
+  color: rgba(232, 232, 232, 0.85);
+}
+
+.articleContent pre {
+  background-color: rgba(11, 11, 11, 0.8);
+  padding: 1.25rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(232, 232, 232, 0.1);
+}
+
+.articleContent pre code {
+  background-color: transparent;
+  padding: 0;
+  font-size: 0.9rem;
+  color: rgba(232, 232, 232, 0.9);
+}
+
+.articleContent blockquote {
+  padding-left: 1rem;
+  border-left: 3px solid rgba(232, 232, 232, 0.3);
+  color: rgba(232, 232, 232, 0.75);
+  font-style: italic;
+  margin: 1.5rem 0;
+  margin-right: 0;
+}
+
+.articleContent img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  border: 1px solid rgba(232, 232, 232, 0.1);
+}
+
+.articleContent table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.articleContent th,
+.articleContent td {
+  border: 1px solid rgba(232, 232, 232, 0.15);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.articleContent th {
+  background-color: rgba(232, 232, 232, 0.05);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .writingContainer {
+    gap: 1.5rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .articleTitle {
+    font-size: 1rem;
+  }
+
+  .articleContainer {
+    max-width: 100%;
+  }
+
+  .articleHeader h1 {
+    font-size: 1.5rem;
+  }
+
+  .articleContent {
+    font-size: 1rem;
+  }
+
+  .articleContent h2 {
+    font-size: 1.25rem;
+    margin-top: 1.75rem;
+  }
+
+  .articleContent h3 {
+    font-size: 1.1rem;
+    margin-top: 1.25rem;
+  }
+
+  .articleContent ul,
+  .articleContent ol {
+    padding-left: 1.5rem;
+  }
+
+  .articleContent pre {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+}
