@@ -15,7 +15,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="navbar">
+    <nav className="navbar" suppressHydrationWarning>
       <div className="container nav-container">
         <ul className="nav-list">
           {navItems.map((item) => {

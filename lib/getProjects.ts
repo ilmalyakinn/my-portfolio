@@ -13,6 +13,7 @@ export async function getProjects(): Promise<ProjectMeta[]> {
     const fullPath = path.join(projectsDir, file);
     const raw = fs.readFileSync(fullPath, "utf8");
     const { data } = matter(raw);
+    const stats = fs.statSync(fullPath);
 
     const slug = file.replace(/\.mdx$/, "");
     const title = data.title || slug;
@@ -30,17 +31,29 @@ export async function getProjects(): Promise<ProjectMeta[]> {
       description,
       tech,
       year,
-    } as ProjectMeta;
+      _mtime: stats.mtime.getTime(), // Store file modification time for sorting
+    } as ProjectMeta & { _mtime: number };
   });
 
-  // sort by year desc if available
+  // Sort by year descending (newest first)
+  // If no year field, use file modification time (newest file first)
   projects.sort((a, b) => {
     const ay = a.year ? String(a.year) : "";
     const by = b.year ? String(b.year) : "";
+
+    // Both have years - compare years (descending)
     if (ay && by) return by.localeCompare(ay);
+
+    // Only a has year - a comes first
     if (ay) return -1;
+
+    // Only b has year - b comes first
     if (by) return 1;
-    return 0;
+
+    // Neither has year - sort by file modification time (newest first)
+    const aMtime = (a as any)._mtime || 0;
+    const bMtime = (b as any)._mtime || 0;
+    return bMtime - aMtime;
   });
 
   return projects;

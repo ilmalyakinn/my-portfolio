@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,23 +16,23 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Portfolio | Data Science & Web Development",
-    template: "%s | Portfolio",
+    default: "Ilmal Yakin Nurahman | Data Science & Web Development",
+    template: "%s | Ilmal Yakin Nurahman",
   },
   description:
     "Personal portfolio showcasing data science projects, articles, and insights on machine learning, analytics, and web development.",
   openGraph: {
-    title: "Portfolio | Data Science & Web Development",
+    title: "Ilmal Yakin Nurahman | Data Science & Web Development",
     description:
       "Personal portfolio showcasing data science projects, articles, and insights on machine learning, analytics, and web development.",
-    url: "https://your-domain.com",
-    siteName: "Portfolio",
+    url: "https://ilmalyakinn.vercel.app",
+    siteName: "Ilmal Yakin Nurahman",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Portfolio | Data Science & Web Development",
+    title: "Ilmal Yakin Nurahman | Data Science & Web Development",
     description:
       "Personal portfolio showcasing data science projects, articles, and insights on machine learning, analytics, and web development.",
   },
@@ -47,13 +48,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable}`}
         suppressHydrationWarning
       >
         <Navbar />
         <main className="container">{children}</main>
+        <Footer />
       </body>
     </html>
   );

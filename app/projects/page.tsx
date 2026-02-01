@@ -25,12 +25,16 @@ export default async function Projects() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
+      <div className={`${styles.header} reveal`}>
         <h1>Projects</h1>
       </div>
       <ul className={styles.projectsList}>
-        {projects.map((p) => (
-          <li key={p.slug} className={styles.card}>
+        {projects.map((p, index) => (
+          <li
+            key={p.slug}
+            className={`${styles.card} reveal-subtle`}
+            style={{ animationDelay: `${0.1 * (index + 1)}s` }}
+          >
             <div className={styles.cardHeader}>
               <h2 className={styles.title}>{p.title}</h2>
               <div className={styles.meta}>

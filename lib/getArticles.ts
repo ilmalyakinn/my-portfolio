@@ -11,6 +11,7 @@ export async function getArticles(): Promise<ArticleMeta[]> {
   const articles: ArticleMeta[] = files.map((file) => {
     const fullPath = path.join(articlesDir, file);
     const raw = fs.readFileSync(fullPath, "utf8");
+    const stats = fs.statSync(fullPath);
 
     // Extract YAML frontmatter between first two '---' markers
     let title = "";
@@ -67,15 +68,29 @@ export async function getArticles(): Promise<ArticleMeta[]> {
       date: date || "",
       summary,
       tags,
-    } as ArticleMeta;
+      _mtime: stats.mtime.getTime(), // Store file modification time for sorting
+    } as ArticleMeta & { _mtime: number };
   });
 
-  // sort by date desc (if date present)
+  // Sort by date descending (newest first)
+  // If no date field, use file modification time (newest file first)
   articles.sort((a, b) => {
-    if (a.date && b.date) return b.date.localeCompare(a.date);
-    if (a.date) return -1;
-    if (b.date) return 1;
-    return 0;
+    const aDate = a.date;
+    const bDate = b.date;
+
+    // Both have dates - compare dates (descending)
+    if (aDate && bDate) return bDate.localeCompare(aDate);
+
+    // Only a has date - a comes first
+    if (aDate) return -1;
+
+    // Only b has date - b comes first
+    if (bDate) return 1;
+
+    // Neither has date - sort by file modification time (newest first)
+    const aMtime = (a as any)._mtime || 0;
+    const bMtime = (b as any)._mtime || 0;
+    return bMtime - aMtime;
   });
 
   return articles;

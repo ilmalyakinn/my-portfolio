@@ -14,7 +14,7 @@ export default async function Writing() {
 
   return (
     <div className={styles.writingContainer}>
-      <div className={styles.header}>
+      <div className={`${styles.header} reveal`}>
         <h1>Writing</h1>
       </div>
 
@@ -31,8 +31,12 @@ export default async function Writing() {
         </section>
       ) : (
         <ul className={styles.writingList}>
-          {articles.map((a) => (
-            <li key={a.slug}>
+          {articles.map((a, index) => (
+            <li
+              key={a.slug}
+              className="reveal-subtle"
+              style={{ animationDelay: `${0.1 * (index + 1)}s` }}
+            >
               <Link href={`/writing/${a.slug}`} className={styles.writingItem}>
                 <h2 className={styles.writingTitle}>{a.title}</h2>
                 {a.date && <span className={styles.writingMeta}>{a.date}</span>}
