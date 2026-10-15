@@ -1,59 +1,61 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
 import { ProjectMeta } from "@/types/project";
+import { getPublicSupabaseClient } from "./supabase-public";
 
 export async function getProjects(): Promise<ProjectMeta[]> {
-  const projectsDir = path.join(process.cwd(), "content", "projects");
-  if (!fs.existsSync(projectsDir)) return [];
+  const supabase = getPublicSupabaseClient();
 
-  const files = fs.readdirSync(projectsDir).filter((f) => f.endsWith(".mdx"));
+  if (!supabase) {
+    console.error("Supabase public client not available.");
+    return [];
+  }
 
-  const projects: ProjectMeta[] = files.map((file) => {
-    const fullPath = path.join(projectsDir, file);
-    const raw = fs.readFileSync(fullPath, "utf8");
-    const { data } = matter(raw);
-    const stats = fs.statSync(fullPath);
+  const { data, error } = await supabase
+    .from("projects")
+    .select(
+      "slug, title, category, year, short_description, description, tools, image_url, github_url, live_url, created_at",
+    )
+    .order("created_at", { ascending: false });
 
-    const slug = file.replace(/\.mdx$/, "");
-    const title = data.title || slug;
-    const description = data.description || data.summary || "";
-    const tech = Array.isArray(data.tech)
-      ? data.tech
-      : typeof data.tech === "string"
-        ? data.tech.split(",").map((s: string) => s.trim())
-        : undefined;
-    const year = data.year || data.date || "";
+  if (error) {
+    console.error("Supabase error fetching projects:", error.message);
+    return [];
+  }
+
+  if (!data) return [];
+
+  const projects: ProjectMeta[] = data.map((item) => {
+    const tools = Array.isArray(item.tools) ? item.tools : [];
 
     return {
-      slug,
-      title,
-      description,
-      tech,
-      year,
-      _mtime: stats.mtime.getTime(), // Store file modification time for sorting
-    } as ProjectMeta & { _mtime: number };
+      slug: item.slug,
+      title: item.title,
+      category: item.category || null,
+      year: item.year ?? null,
+      short_description: item.short_description || null,
+      description: item.description || item.short_description || null,
+      tools,
+      tech: tools,
+      image_url: item.image_url || null,
+      github_url: item.github_url || null,
+      live_url: item.live_url || null,
+      source: "supabase" as const,
+    };
   });
 
-  // Sort by year descending (newest first)
-  // If no year field, use file modification time (newest file first)
+  // Sort by year descending, then by created_at descending
   projects.sort((a, b) => {
-    const ay = a.year ? String(a.year) : "";
-    const by = b.year ? String(b.year) : "";
+    const aYear = a.year != null && a.year !== "" ? Number(a.year) : null;
+    const bYear = b.year != null && b.year !== "" ? Number(b.year) : null;
 
-    // Both have years - compare years (descending)
-    if (ay && by) return by.localeCompare(ay);
+    if (aYear !== null && bYear !== null && !isNaN(aYear) && !isNaN(bYear)) {
+      if (bYear !== aYear) return bYear - aYear;
+    } else if (aYear !== null && !isNaN(aYear)) {
+      return -1;
+    } else if (bYear !== null && !isNaN(bYear)) {
+      return 1;
+    }
 
-    // Only a has year - a comes first
-    if (ay) return -1;
-
-    // Only b has year - b comes first
-    if (by) return 1;
-
-    // Neither has year - sort by file modification time (newest first)
-    const aMtime = (a as any)._mtime || 0;
-    const bMtime = (b as any)._mtime || 0;
-    return bMtime - aMtime;
+    return 0;
   });
 
   return projects;

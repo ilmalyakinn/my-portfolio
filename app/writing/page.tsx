@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { getArticles } from "@/lib/getArticles";
+import { formatCategory } from "@/lib/categories";
 import type { Metadata } from "next";
 import styles from "@/styles/writing.module.css";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Writing",
@@ -22,11 +25,11 @@ export default async function Writing() {
         <section className={styles.emptyState}>
           <h2>No articles yet</h2>
           <p>
-            I'm working on some pieces to share. Check back soon for insights,
+            I&apos;m working on some pieces to share. Check back soon for insights,
             tutorials, and thoughts on web development and data.
           </p>
           <p className={styles.emptyStateHint}>
-            New articles will appear here as they're published.
+            New articles will appear here as they&apos;re published.
           </p>
         </section>
       ) : (
@@ -39,7 +42,14 @@ export default async function Writing() {
             >
               <Link href={`/writing/${a.slug}`} className={styles.writingItem}>
                 <h2 className={styles.writingTitle}>{a.title}</h2>
-                {a.date && <span className={styles.writingMeta}>{a.date}</span>}
+                <div className={styles.writingMeta}>
+                  {a.date && <span>{a.date}</span>}
+                  {a.category && (
+                    <span className={styles.categoryBadge}>
+                      {formatCategory(a.category)}
+                    </span>
+                  )}
+                </div>
                 {a.summary && (
                   <p className={styles.writingExcerpt}>{a.summary}</p>
                 )}

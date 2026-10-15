@@ -9,16 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mdx-js/react": "^3.1.1",
+    "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
-    "gray-matter": "^4.0.3",
     "marked": "^17.0.1",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
-    "@next/mdx": "16.1.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

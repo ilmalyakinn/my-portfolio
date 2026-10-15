@@ -1,6 +1,12 @@
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const normalizeSupabaseUrl = (url?: string) =>
+  url
+    ?.trim()
+    .replace(/\/+$/, "")
+    .replace(/\/rest\/v1\/?$/i, "") ?? url;
+
+const supabaseUrl = normalizeSupabaseUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 if (!supabaseUrl || !supabasePublishableKey) {
@@ -9,10 +15,7 @@ if (!supabaseUrl || !supabasePublishableKey) {
   );
 }
 
-export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false,
-    detectSessionInUrl: false,
-  },
-});
+export const supabase = createBrowserClient(
+  supabaseUrl,
+  supabasePublishableKey,
+);

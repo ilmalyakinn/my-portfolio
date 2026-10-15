@@ -1,0 +1,298 @@
+"use client";
+
+import Link from "next/link";
+import { useActionState } from "react";
+import {
+  updateArticleAction,
+  type ArticleFormState,
+  type ArticleFormValues,
+} from "../../actions";
+
+type ArticleRecord = {
+  id: string;
+  slug: string;
+  title_id?: string | null;
+  title_en?: string | null;
+  excerpt_id?: string | null;
+  excerpt_en?: string | null;
+  content_id?: string | null;
+  content_en?: string | null;
+  category?: string | null;
+  cover_image?: string | null;
+  published_at?: string | null;
+};
+
+function getDefaultValues(article: ArticleRecord): ArticleFormValues {
+  return {
+    slug: article.slug ?? "",
+    title_id: article.title_id ?? "",
+    title_en: article.title_en ?? "",
+    excerpt_id: article.excerpt_id ?? "",
+    excerpt_en: article.excerpt_en ?? "",
+    content_id: article.content_id ?? "",
+    content_en: article.content_en ?? "",
+    category: article.category ?? "education",
+    cover_image: article.cover_image ?? "",
+    published: Boolean(article.published_at),
+    published_at: article.published_at
+      ? new Date(article.published_at).toISOString().slice(0, 16)
+      : "",
+  };
+}
+
+export default function EditArticleForm({
+  article,
+}: {
+  article: ArticleRecord;
+}) {
+  const initialValues = getDefaultValues(article);
+  const [state, formAction, isPending] = useActionState(updateArticleAction, {
+    values: initialValues,
+  } as ArticleFormState);
+
+  const values = state.values ?? initialValues;
+
+  return (
+    <div style={{ maxWidth: 900, margin: "0 auto", padding: "2rem 0 4rem" }}>
+      <header style={{ marginBottom: "2rem" }}>
+        <p
+          style={{
+            margin: 0,
+            color: "rgba(232, 232, 232, 0.7)",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            fontSize: "0.72rem",
+          }}
+        >
+          Articles
+        </p>
+        <h1 style={{ margin: "0.35rem 0 0" }}>Edit article</h1>
+      </header>
+
+      <section
+        style={{
+          border: "1px solid rgba(232, 232, 232, 0.12)",
+          background: "rgba(255, 255, 255, 0.02)",
+          borderRadius: 18,
+          padding: "1.5rem",
+        }}
+      >
+        {state.error ? (
+          <p style={{ marginTop: 0, marginBottom: "1rem", color: "#fca5a5" }}>
+            {state.error}
+          </p>
+        ) : null}
+
+        <form action={formAction} style={{ display: "grid", gap: "1rem" }}>
+          <input type="hidden" name="id" value={article.id} />
+
+          <label style={{ display: "grid", gap: "0.5rem" }}>
+            <span>Slug</span>
+            <input
+              name="slug"
+              required
+              defaultValue={values.slug}
+              disabled={isPending}
+              style={inputStyle}
+            />
+          </label>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              gap: "1rem",
+            }}
+          >
+            <label style={{ display: "grid", gap: "0.5rem" }}>
+              <span>Title (ID)</span>
+              <input
+                name="title_id"
+                defaultValue={values.title_id}
+                disabled={isPending}
+                style={inputStyle}
+              />
+            </label>
+            <label style={{ display: "grid", gap: "0.5rem" }}>
+              <span>Title (EN)</span>
+              <input
+                name="title_en"
+                defaultValue={values.title_en}
+                disabled={isPending}
+                style={inputStyle}
+              />
+            </label>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              gap: "1rem",
+            }}
+          >
+            <label style={{ display: "grid", gap: "0.5rem" }}>
+              <span>Excerpt (ID)</span>
+              <textarea
+                name="excerpt_id"
+                rows={3}
+                defaultValue={values.excerpt_id}
+                disabled={isPending}
+                style={textareaStyle}
+              />
+            </label>
+            <label style={{ display: "grid", gap: "0.5rem" }}>
+              <span>Excerpt (EN)</span>
+              <textarea
+                name="excerpt_en"
+                rows={3}
+                defaultValue={values.excerpt_en}
+                disabled={isPending}
+                style={textareaStyle}
+              />
+            </label>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              gap: "1rem",
+            }}
+          >
+            <label style={{ display: "grid", gap: "0.5rem" }}>
+              <span>Content (ID)</span>
+              <textarea
+                name="content_id"
+                rows={6}
+                defaultValue={values.content_id}
+                disabled={isPending}
+                style={textareaStyle}
+              />
+            </label>
+            <label style={{ display: "grid", gap: "0.5rem" }}>
+              <span>Content (EN)</span>
+              <textarea
+                name="content_en"
+                rows={6}
+                defaultValue={values.content_en}
+                disabled={isPending}
+                style={textareaStyle}
+              />
+            </label>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              gap: "1rem",
+            }}
+          >
+            <label style={{ display: "grid", gap: "0.5rem" }}>
+              <span>Category</span>
+              <select
+                name="category"
+                required
+                defaultValue={values.category}
+                disabled={isPending}
+                style={inputStyle}
+              >
+                <option value="education">education</option>
+                <option value="politics">politics</option>
+                <option value="data-science">data-science</option>
+              </select>
+            </label>
+            <label style={{ display: "grid", gap: "0.5rem" }}>
+              <span>Cover image URL</span>
+              <input
+                name="cover_image"
+                type="url"
+                defaultValue={values.cover_image}
+                disabled={isPending}
+                style={inputStyle}
+              />
+            </label>
+          </div>
+
+          <label
+            style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+          >
+            <input
+              name="published"
+              type="checkbox"
+              defaultChecked={values.published}
+              disabled={isPending}
+            />
+            <span>Publish immediately</span>
+          </label>
+
+          <label style={{ display: "grid", gap: "0.5rem" }}>
+            <span>Publication date</span>
+            <input
+              name="published_at"
+              type="datetime-local"
+              defaultValue={values.published_at}
+              disabled={isPending}
+              style={inputStyle}
+            />
+          </label>
+
+          <div
+            style={{
+              display: "flex",
+              gap: "0.75rem",
+              flexWrap: "wrap",
+              marginTop: "0.75rem",
+            }}
+          >
+            <button
+              type="submit"
+              disabled={isPending}
+              style={{
+                background: "#ffffff",
+                color: "#111111",
+                borderRadius: 999,
+                border: "none",
+                padding: "0.8rem 1rem",
+                fontWeight: 600,
+                cursor: isPending ? "wait" : "pointer",
+                opacity: isPending ? 0.7 : 1,
+              }}
+            >
+              {isPending ? "Saving..." : "Save changes"}
+            </button>
+            <Link
+              href="/admin/articles"
+              style={{
+                background: "transparent",
+                border: "1px solid rgba(232, 232, 232, 0.2)",
+                borderRadius: 999,
+                color: "inherit",
+                padding: "0.8rem 1rem",
+                display: "inline-block",
+              }}
+            >
+              Back to articles
+            </Link>
+          </div>
+        </form>
+      </section>
+    </div>
+  );
+}
+
+const inputStyle: React.CSSProperties = {
+  padding: "0.8rem 1rem",
+  borderRadius: 10,
+  border: "1px solid rgba(232, 232, 232, 0.2)",
+  background: "rgba(255, 255, 255, 0.02)",
+  color: "inherit",
+  font: "inherit",
+};
+
+const textareaStyle: React.CSSProperties = {
+  ...inputStyle,
+  resize: "vertical",
+  minHeight: 120,
+};
