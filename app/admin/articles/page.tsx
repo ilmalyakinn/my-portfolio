@@ -243,7 +243,14 @@ export default async function AdminArticlesPage({
                     const isPublished = Boolean(
                       article.published_at && article.published_at !== "",
                     );
-                    const status = isPublished ? "Published" : "Draft";
+                    const isFuture = article.published_at
+                      ? new Date(article.published_at).getTime() > Date.now()
+                      : false;
+                    const status = !isPublished
+                      ? "Draft"
+                      : isFuture
+                        ? "Scheduled"
+                        : "Published";
 
                     return (
                       <tr
@@ -282,10 +289,18 @@ export default async function AdminArticlesPage({
                               display: "inline-block",
                               padding: "0.25rem 0.6rem",
                               borderRadius: 999,
-                              background: isPublished
-                                ? "rgba(34, 197, 94, 0.12)"
-                                : "rgba(250, 204, 21, 0.12)",
-                              color: isPublished ? "#86efac" : "#fcd34d",
+                              background:
+                                status === "Published"
+                                  ? "rgba(34, 197, 94, 0.12)"
+                                  : status === "Scheduled"
+                                    ? "rgba(59, 130, 246, 0.12)"
+                                    : "rgba(250, 204, 21, 0.12)",
+                              color:
+                                status === "Published"
+                                  ? "#86efac"
+                                  : status === "Scheduled"
+                                    ? "#93c5fd"
+                                    : "#fcd34d",
                               fontSize: "0.8rem",
                             }}
                           >

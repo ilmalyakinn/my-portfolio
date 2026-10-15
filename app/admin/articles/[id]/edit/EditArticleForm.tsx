@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import {
   updateArticleAction,
   type ArticleFormState,
@@ -22,6 +22,19 @@ type ArticleRecord = {
   published_at?: string | null;
 };
 
+function formatDateTimeLocal(dateStr?: string | null): string {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const year = date.getFullYear();
+  const month = pad(date.getMonth() + 1);
+  const day = pad(date.getDate());
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
 function getDefaultValues(article: ArticleRecord): ArticleFormValues {
   return {
     slug: article.slug ?? "",
@@ -34,9 +47,7 @@ function getDefaultValues(article: ArticleRecord): ArticleFormValues {
     category: article.category ?? "education",
     cover_image: article.cover_image ?? "",
     published: Boolean(article.published_at),
-    published_at: article.published_at
-      ? new Date(article.published_at).toISOString().slice(0, 16)
-      : "",
+    published_at: formatDateTimeLocal(article.published_at),
   };
 }
 
@@ -45,6 +56,12 @@ export default function EditArticleForm({
 }: {
   article: ArticleRecord;
 }) {
+  const [timezoneOffset, setTimezoneOffset] = useState<number | "">("");
+
+  useEffect(() => {
+    setTimezoneOffset(new Date().getTimezoneOffset());
+  }, []);
+
   const initialValues = getDefaultValues(article);
   const [state, formAction, isPending] = useActionState(updateArticleAction, {
     values: initialValues,
@@ -85,6 +102,7 @@ export default function EditArticleForm({
 
         <form action={formAction} style={{ display: "grid", gap: "1rem" }}>
           <input type="hidden" name="id" value={article.id} />
+          <input type="hidden" name="timezone_offset" value={timezoneOffset} />
 
           <label style={{ display: "grid", gap: "0.5rem" }}>
             <span>Slug</span>
@@ -224,7 +242,7 @@ export default function EditArticleForm({
               defaultChecked={values.published}
               disabled={isPending}
             />
-            <span>Publish immediately</span>
+            <span>Published</span>
           </label>
 
           <label style={{ display: "grid", gap: "0.5rem" }}>
@@ -236,6 +254,15 @@ export default function EditArticleForm({
               disabled={isPending}
               style={inputStyle}
             />
+            <span
+              style={{
+                fontSize: "0.8rem",
+                color: "rgba(232, 232, 232, 0.6)",
+              }}
+            >
+              Optional. Leave blank to publish immediately now. Set a date to
+              schedule or backdate.
+            </span>
           </label>
 
           <div

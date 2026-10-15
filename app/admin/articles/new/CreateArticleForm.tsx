@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { createArticleAction, type ArticleFormState } from "../actions";
 
 const defaultValues = {
@@ -19,6 +19,12 @@ const defaultValues = {
 };
 
 export default function CreateArticleForm() {
+  const [timezoneOffset, setTimezoneOffset] = useState<number | "">("");
+
+  useEffect(() => {
+    setTimezoneOffset(new Date().getTimezoneOffset());
+  }, []);
+
   const [state, formAction, isPending] = useActionState(createArticleAction, {
     values: defaultValues,
   } as ArticleFormState);
@@ -57,6 +63,7 @@ export default function CreateArticleForm() {
         ) : null}
 
         <form action={formAction} style={{ display: "grid", gap: "1rem" }}>
+          <input type="hidden" name="timezone_offset" value={timezoneOffset} />
           <label style={{ display: "grid", gap: "0.5rem" }}>
             <span>Slug</span>
             <input
@@ -207,6 +214,15 @@ export default function CreateArticleForm() {
               disabled={isPending}
               style={inputStyle}
             />
+            <span
+              style={{
+                fontSize: "0.8rem",
+                color: "rgba(232, 232, 232, 0.6)",
+              }}
+            >
+              Optional. Leave blank to publish immediately now. Set a date to
+              schedule or backdate.
+            </span>
           </label>
 
           <div

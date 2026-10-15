@@ -86,11 +86,7 @@ function validateArticleValues(values: ArticleFormValues): string | null {
   const hasContent = values.content_id || values.content_en;
   if (!hasContent) return "At least one content field is required.";
 
-  if (values.published) {
-    if (!values.published_at) {
-      return "Publication date is required when the article is published.";
-    }
-
+  if (values.published && values.published_at) {
     const parsedDate = new Date(values.published_at);
     if (Number.isNaN(parsedDate.getTime())) {
       return "Publication date is invalid.";
@@ -100,12 +96,38 @@ function validateArticleValues(values: ArticleFormValues): string | null {
   return null;
 }
 
-function getPublishedAt(value: ArticleFormValues): string | null {
-  if (!value.published) return null;
-  if (!value.published_at) return null;
+function getPublishedAt(
+  values: ArticleFormValues,
+  timezoneOffset?: number | null,
+): string | null {
+  if (!values.published) return null;
 
-  const parsedDate = new Date(value.published_at);
-  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate.toISOString();
+  // If published is true and no custom date provided, publish immediately at current UTC time
+  if (!values.published_at || values.published_at.trim() === "") {
+    return new Date().toISOString();
+  }
+
+  const dateStr = values.published_at.trim();
+
+  // If client provided its timezone offset (in minutes), convert local datetime-local string to true UTC
+  if (
+    typeof timezoneOffset === "number" &&
+    !Number.isNaN(timezoneOffset) &&
+    dateStr.length >= 10 &&
+    !dateStr.endsWith("Z") &&
+    !dateStr.includes("+")
+  ) {
+    const localUtcMs = new Date(dateStr + "Z").getTime();
+    if (!Number.isNaN(localUtcMs)) {
+      const trueUtcMs = localUtcMs + timezoneOffset * 60 * 1000;
+      return new Date(trueUtcMs).toISOString();
+    }
+  }
+
+  const parsedDate = new Date(dateStr);
+  return Number.isNaN(parsedDate.getTime())
+    ? new Date().toISOString()
+    : parsedDate.toISOString();
 }
 
 export async function createArticleAction(
@@ -113,6 +135,10 @@ export async function createArticleAction(
   formData: FormData,
 ): Promise<ArticleFormState> {
   const values = getFormValues(formData);
+  const timezoneOffsetStr = formData.get("timezone_offset") as string | null;
+  const timezoneOffset = timezoneOffsetStr
+    ? parseInt(timezoneOffsetStr, 10)
+    : null;
 
   try {
     const supabase = await requireAdminSupabase();
@@ -120,7 +146,7 @@ export async function createArticleAction(
     const validationError = validateArticleValues(values);
     if (validationError) return { error: validationError, values };
 
-    const publishedAt = getPublishedAt(values);
+    const publishedAt = getPublishedAt(values, timezoneOffset);
     if (values.published && publishedAt === null) {
       return { error: "Publication date is invalid.", values };
     }
@@ -158,6 +184,7 @@ export async function createArticleAction(
       };
     }
 
+    revalidatePath("/");
     revalidatePath("/writing");
     revalidatePath(`/writing/${values.slug}`);
     revalidatePath("/writing/[slug]", "page");
@@ -175,6 +202,10 @@ export async function updateArticleAction(
 ): Promise<ArticleFormState> {
   const values = getFormValues(formData);
   const id = (formData.get("id") as string | null)?.trim();
+  const timezoneOffsetStr = formData.get("timezone_offset") as string | null;
+  const timezoneOffset = timezoneOffsetStr
+    ? parseInt(timezoneOffsetStr, 10)
+    : null;
 
   if (!id) {
     return { error: "Article ID is missing.", values };
@@ -196,7 +227,7 @@ export async function updateArticleAction(
     const validationError = validateArticleValues(values);
     if (validationError) return { error: validationError, values };
 
-    const publishedAt = getPublishedAt(values);
+    const publishedAt = getPublishedAt(values, timezoneOffset);
     if (values.published && publishedAt === null) {
       return { error: "Publication date is invalid.", values };
     }
@@ -242,6 +273,7 @@ export async function updateArticleAction(
       };
     }
 
+    revalidatePath("/");
     revalidatePath("/writing");
     revalidatePath(`/writing/${values.slug}`);
     if (existing.data?.slug && existing.data.slug !== values.slug) {
@@ -287,6 +319,7 @@ export async function deleteArticleAction(formData: FormData) {
       );
     }
 
+    revalidatePath("/");
     revalidatePath("/writing");
     if (existingArticle?.slug) {
       revalidatePath(`/writing/${existingArticle.slug}`);

@@ -40,7 +40,13 @@ export async function getArticle(
     .maybeSingle();
 
   if (error && error.code !== "PGRST116") {
-    console.error("Supabase error fetching article:", error.message);
+    console.error("Supabase error fetching article:", {
+      slug,
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+    });
     return null;
   }
 

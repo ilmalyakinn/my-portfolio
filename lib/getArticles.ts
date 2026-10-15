@@ -31,7 +31,12 @@ export async function getArticles(): Promise<ArticleMeta[]> {
     .order("published_at", { ascending: false });
 
   if (error) {
-    console.error("Supabase error fetching articles:", error.message);
+    console.error("Supabase error fetching articles:", {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+    });
     return [];
   }
 
