@@ -65,15 +65,15 @@
   font-weight: 500;
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(232, 232, 232, 0.8);
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  color: var(--muted-strong);
   letter-spacing: 0.02em;
 }
 
 .writingExcerpt {
   font-size: 0.95rem;
-  color: rgba(232, 232, 232, 0.75);
+  color: var(--muted);
   line-height: 1.6;
   margin: 0;
 }
@@ -94,14 +94,14 @@
 
 .emptyState p {
   font-size: 1rem;
-  color: rgba(232, 232, 232, 0.6);
+  color: var(--muted);
   line-height: 1.6;
   margin-bottom: 0.75rem;
 }
 
 .emptyStateHint {
   font-size: 0.875rem;
-  color: rgba(232, 232, 232, 0.4);
+  color: var(--muted);
   margin-bottom: 0;
 }
 
@@ -142,7 +142,7 @@
   gap: 0.75rem;
   flex-wrap: wrap;
   font-size: 0.95rem;
-  color: rgba(232, 232, 232, 0.6);
+  color: var(--muted);
 }
 
 .articleCategory {
@@ -151,7 +151,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(232, 232, 232, 0.7);
+  color: var(--muted-strong);
   margin-bottom: 0.5rem;
 }
 
@@ -188,9 +188,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(232, 232, 232, 0.7);
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  color: var(--muted-strong);
   padding: 0.3rem 0.75rem;
   border-radius: 999px;
   font-size: 0.8rem;
@@ -200,14 +200,14 @@
 }
 
 .langBtn:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
+  border-color: var(--foreground);
+  color: var(--foreground);
 }
 
 .langBtnActive {
-  background: #ffffff;
-  color: #111111;
-  border-color: #ffffff;
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
   font-weight: 600;
 }
 
@@ -235,6 +235,7 @@
 
 .articleContent p {
   margin-bottom: 1.75rem;
+  color: var(--muted);
 }
 
 .articleContent h2 {
@@ -273,7 +274,7 @@
 .articleContent em,
 .articleContent i {
   font-style: italic;
-  color: rgba(232, 232, 232, 0.95);
+  color: var(--muted-strong);
 }
 
 .articleContent ul,
@@ -296,45 +297,45 @@
 }
 
 .articleContent a {
-  color: rgba(232, 232, 232, 0.8);
+  color: var(--muted-strong);
   text-decoration: underline;
-  text-decoration-color: rgba(232, 232, 232, 0.4);
+  text-decoration-color: var(--border);
   transition: text-decoration-color 0.2s ease;
 }
 
 .articleContent a:hover {
-  text-decoration-color: rgba(232, 232, 232, 0.8);
+  text-decoration-color: var(--foreground);
 }
 
 .articleContent code {
-  background-color: rgba(232, 232, 232, 0.08);
+  background-color: var(--surface-soft);
   padding: 0.2rem 0.4rem;
   border-radius: 3px;
   font-family: "Courier New", Courier, monospace;
   font-size: 0.95em;
-  color: rgba(232, 232, 232, 0.85);
+  color: var(--muted-strong);
 }
 
 .articleContent pre {
-  background-color: rgba(11, 11, 11, 0.8);
+  background-color: rgba(15, 23, 42, 0.92);
   padding: 1.25rem;
   border-radius: 4px;
   overflow-x: auto;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(232, 232, 232, 0.1);
+  border: 1px solid var(--border);
 }
 
 .articleContent pre code {
   background-color: transparent;
   padding: 0;
   font-size: 0.9rem;
-  color: rgba(232, 232, 232, 0.9);
+  color: #e2e8f0;
 }
 
 .articleContent blockquote {
   padding-left: 1rem;
-  border-left: 3px solid rgba(232, 232, 232, 0.3);
-  color: rgba(232, 232, 232, 0.75);
+  border-left: 3px solid var(--border);
+  color: var(--muted-strong);
   font-style: italic;
   margin: 1.5rem 0;
   margin-right: 0;

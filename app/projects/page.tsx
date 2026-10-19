@@ -54,6 +54,7 @@ export default async function Projects() {
 
           const hasGithub = isValidHttpUrl(p.github_url);
           const hasLive = isValidHttpUrl(p.live_url);
+          const hasProjectImage = isValidHttpUrl(p.image_url);
           const displayDescription = p.short_description || p.description;
 
           return (
@@ -64,16 +65,17 @@ export default async function Projects() {
             >
               <div className={styles.cardHeader}>
                 <h2 className={styles.title}>
-                  <Link href={`/projects/${p.slug}`} className={styles.titleLink}>
+                  <Link
+                    href={`/projects/${p.slug}`}
+                    className={styles.titleLink}
+                  >
                     {p.title}
                   </Link>
                 </h2>
                 <div className={styles.meta}>
                   {p.year && <span className={styles.year}>{p.year}</span>}
                   {p.category && (
-                    <span className={styles.categoryBadge}>
-                      {p.category}
-                    </span>
+                    <span className={styles.categoryBadge}>{p.category}</span>
                   )}
                   {displayTools.length > 0 && (
                     <div className={styles.badges}>
@@ -86,6 +88,15 @@ export default async function Projects() {
                   )}
                 </div>
               </div>
+              {hasProjectImage && (
+                <div className={styles.projectImageWrapper}>
+                  <img
+                    src={p.image_url!.trim()}
+                    alt={p.title}
+                    className={styles.projectImageCard}
+                  />
+                </div>
+              )}
               {displayDescription && (
                 <div className={styles.description}>{displayDescription}</div>
               )}
