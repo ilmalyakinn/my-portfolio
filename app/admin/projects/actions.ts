@@ -63,14 +63,21 @@ function getFormValues(formData: FormData): ProjectFormValues {
   return {
     title: ((formData.get("title") as string | null)?.trim() ?? "") as string,
     slug: ((formData.get("slug") as string | null)?.trim() ?? "") as string,
-    category: ((formData.get("category") as string | null)?.trim() ?? "") as string,
+    category: ((formData.get("category") as string | null)?.trim() ??
+      "") as string,
     year: ((formData.get("year") as string | null)?.trim() ?? "") as string,
-    short_description: ((formData.get("short_description") as string | null)?.trim() ?? "") as string,
-    description: ((formData.get("description") as string | null)?.trim() ?? "") as string,
+    short_description: ((
+      formData.get("short_description") as string | null
+    )?.trim() ?? "") as string,
+    description: ((formData.get("description") as string | null)?.trim() ??
+      "") as string,
     tools: ((formData.get("tools") as string | null)?.trim() ?? "") as string,
-    image_url: ((formData.get("image_url") as string | null)?.trim() ?? "") as string,
-    github_url: ((formData.get("github_url") as string | null)?.trim() ?? "") as string,
-    live_url: ((formData.get("live_url") as string | null)?.trim() ?? "") as string,
+    image_url: ((formData.get("image_url") as string | null)?.trim() ??
+      "") as string,
+    github_url: ((formData.get("github_url") as string | null)?.trim() ??
+      "") as string,
+    live_url: ((formData.get("live_url") as string | null)?.trim() ??
+      "") as string,
   };
 }
 
@@ -285,11 +292,13 @@ export async function createProjectAction(
     }
 
     revalidatePath("/admin/projects");
+    revalidatePath("/");
     revalidatePath("/projects");
     revalidatePath("/projects/[slug]", "page");
     redirect("/admin/projects?success=created");
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Terjadi kesalahan";
+    const message =
+      error instanceof Error ? error.message : "Terjadi kesalahan";
     if (message === "NEXT_REDIRECT") throw error;
     return { error: message, values };
   }
@@ -338,7 +347,8 @@ export async function updateProjectAction(
 
     if (duplicate) {
       return {
-        error: "Slug ini sudah digunakan oleh proyek lain. Silakan pilih slug yang unik.",
+        error:
+          "Slug ini sudah digunakan oleh proyek lain. Silakan pilih slug yang unik.",
         values,
       };
     }
@@ -372,7 +382,10 @@ export async function updateProjectAction(
       // Admin explicitly requested to remove the image
       finalImageUrl = null;
       values.image_url = "";
-    } else if (values.image_url && values.image_url !== existing.data.image_url) {
+    } else if (
+      values.image_url &&
+      values.image_url !== existing.data.image_url
+    ) {
       // Admin changed the external image URL
       finalImageUrl = values.image_url;
     } else if (!values.image_url && !existing.data.image_url) {
@@ -406,12 +419,14 @@ export async function updateProjectAction(
       }
 
       return {
-        error: updateError.message || "Gagal memperbarui proyek. Silakan coba lagi.",
+        error:
+          updateError.message || "Gagal memperbarui proyek. Silakan coba lagi.",
         values,
       };
     }
 
     revalidatePath("/admin/projects");
+    revalidatePath("/");
     revalidatePath("/projects");
     if (existing?.data?.slug && existing.data.slug !== values.slug) {
       revalidatePath(`/projects/${existing.data.slug}`);
@@ -420,7 +435,8 @@ export async function updateProjectAction(
     revalidatePath("/projects/[slug]", "page");
     redirect("/admin/projects?success=updated");
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Terjadi kesalahan";
+    const message =
+      error instanceof Error ? error.message : "Terjadi kesalahan";
     if (message === "NEXT_REDIRECT") throw error;
     return { error: message, values };
   }
@@ -429,7 +445,10 @@ export async function updateProjectAction(
 export async function deleteProjectAction(formData: FormData) {
   const id = (formData.get("id") as string | null)?.trim();
   if (!id) {
-    redirect("/admin/projects?error=" + encodeURIComponent("ID proyek tidak ditemukan"));
+    redirect(
+      "/admin/projects?error=" +
+        encodeURIComponent("ID proyek tidak ditemukan"),
+    );
   }
 
   try {
@@ -442,7 +461,9 @@ export async function deleteProjectAction(formData: FormData) {
       .maybeSingle();
 
     if (selectError || !existing) {
-      redirect("/admin/projects?error=" + encodeURIComponent("Proyek tidak ditemukan"));
+      redirect(
+        "/admin/projects?error=" + encodeURIComponent("Proyek tidak ditemukan"),
+      );
     }
 
     const { error } = await supabase.from("projects").delete().eq("id", id);
@@ -450,11 +471,12 @@ export async function deleteProjectAction(formData: FormData) {
     if (error) {
       redirect(
         "/admin/projects?error=" +
-          encodeURIComponent(error.message || "Gagal menghapus proyek")
+          encodeURIComponent(error.message || "Gagal menghapus proyek"),
       );
     }
 
     revalidatePath("/admin/projects");
+    revalidatePath("/");
     revalidatePath("/projects");
     if (existing?.slug) {
       revalidatePath(`/projects/${existing.slug}`);
@@ -462,7 +484,8 @@ export async function deleteProjectAction(formData: FormData) {
     revalidatePath("/projects/[slug]", "page");
     redirect("/admin/projects?success=deleted");
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Terjadi kesalahan";
+    const message =
+      error instanceof Error ? error.message : "Terjadi kesalahan";
     if (message === "NEXT_REDIRECT") throw error;
     redirect("/admin/projects?error=" + encodeURIComponent(message));
   }

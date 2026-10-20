@@ -3,6 +3,7 @@ export type ProjectMeta = {
   title: string;
   category?: string | null;
   year?: string | number | null;
+  created_at?: string | null;
   short_description?: string | null;
   description?: string | null;
   tools?: string[];

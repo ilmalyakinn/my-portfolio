@@ -31,6 +31,7 @@ export async function getProjects(): Promise<ProjectMeta[]> {
       title: item.title,
       category: item.category || null,
       year: item.year ?? null,
+      created_at: item.created_at || null,
       short_description: item.short_description || null,
       description: item.description || item.short_description || null,
       tools,
@@ -42,18 +43,22 @@ export async function getProjects(): Promise<ProjectMeta[]> {
     };
   });
 
-  // Sort by year descending, then by created_at descending
+  // Use created_at as the primary recency signal, then year as a fallback for stable ordering.
   projects.sort((a, b) => {
-    const aYear = a.year != null && a.year !== "" ? Number(a.year) : null;
-    const bYear = b.year != null && b.year !== "" ? Number(b.year) : null;
+    const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
+    const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
 
-    if (aYear !== null && bYear !== null && !isNaN(aYear) && !isNaN(bYear)) {
-      if (bYear !== aYear) return bYear - aYear;
-    } else if (aYear !== null && !isNaN(aYear)) {
-      return -1;
-    } else if (bYear !== null && !isNaN(bYear)) {
-      return 1;
+    if (aTime !== bTime) return bTime - aTime;
+
+    const aYear = a.year != null && a.year !== "" ? Number(a.year) : NaN;
+    const bYear = b.year != null && b.year !== "" ? Number(b.year) : NaN;
+
+    if (!Number.isNaN(aYear) && !Number.isNaN(bYear) && aYear !== bYear) {
+      return bYear - aYear;
     }
+
+    if (!Number.isNaN(aYear) && Number.isNaN(bYear)) return -1;
+    if (Number.isNaN(aYear) && !Number.isNaN(bYear)) return 1;
 
     return 0;
   });
