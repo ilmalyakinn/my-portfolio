@@ -5,6 +5,41 @@
   gap: 2rem;
 }
 
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0 0 1.5rem;
+}
+
+.filterPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(148, 163, 184, 0.04);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.filterPill:hover,
+.filterPill:focus-visible {
+  border-color: rgba(59, 130, 246, 0.7);
+  color: var(--foreground);
+  outline: none;
+}
+
+.filterPillActive {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25);
+}
+
 .header {
   margin-bottom: 1rem;
 }
@@ -97,6 +132,12 @@
   color: var(--muted);
   line-height: 1.6;
   margin-bottom: 0.75rem;
+}
+
+.emptyStateLink {
+  color: #60a5fa;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .emptyStateHint {
@@ -370,6 +411,15 @@
 @media (max-width: 768px) {
   .writingContainer {
     gap: 1.5rem;
+  }
+
+  .filterBar {
+    gap: 0.5rem;
+  }
+
+  .filterPill {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
   }
 
   .header h1 {

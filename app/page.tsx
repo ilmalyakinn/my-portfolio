@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ProjectCard from "@/components/ProjectCard";
 import { getProjects } from "@/lib/getProjects";
 import { getArticles } from "@/lib/getArticles";
 
@@ -223,30 +224,7 @@ export default async function Home() {
           </div>
           <ul className="featured-list">
             {featuredProjects.map((project) => (
-              <li key={project.slug} className="featured-project-item">
-                <h3 className="featured-project-title">{project.title}</h3>
-                <div className="featured-project-meta">
-                  {project.year && (
-                    <span className="featured-project-year">
-                      {project.year}
-                    </span>
-                  )}
-                  {project.tech && project.tech.length > 0 && (
-                    <div className="featured-project-tech">
-                      {project.tech.map((tech) => (
-                        <span key={tech} className="featured-project-badge">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                {project.description && (
-                  <p className="featured-project-desc">
-                    {project.description}
-                  </p>
-                )}
-              </li>
+              <ProjectCard key={project.slug} project={project} />
             ))}
           </ul>
         </section>
