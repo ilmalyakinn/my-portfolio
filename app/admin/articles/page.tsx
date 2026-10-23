@@ -58,7 +58,7 @@ export default async function AdminArticlesPage({
       not_found: "Article not found.",
       slug_required: "Slug is required.",
       invalid_category:
-        "Category must be education, politics, or data-science.",
+        "Category must be education, publications, or data-science.",
       title_required: "At least one title field is required.",
       content_required: "At least one content field is required.",
       published_at_required:

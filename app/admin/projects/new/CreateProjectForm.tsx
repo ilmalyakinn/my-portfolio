@@ -234,13 +234,17 @@ export default function CreateProjectForm() {
               </span>
               <select
                 name="category"
-                defaultValue={values.category}
+                defaultValue={
+                  values.category === "website"
+                    ? "machine-learning"
+                    : values.category
+                }
                 disabled={isPending}
                 style={selectStyle}
               >
                 <option value="data-science">Data Science</option>
                 <option value="dashboard">Dashboard</option>
-                <option value="website">Website</option>
+                <option value="machine-learning">Machine Learning</option>
                 <option value="creative-branding">Creative Branding</option>
               </select>
               <span style={hintStyle}>
@@ -260,9 +264,7 @@ export default function CreateProjectForm() {
                 placeholder="2025"
                 style={inputStyle}
               />
-              <span style={hintStyle}>
-                Tahun pengerjaan atau rilis proyek.
-              </span>
+              <span style={hintStyle}>Tahun pengerjaan atau rilis proyek.</span>
             </label>
           </div>
 
@@ -365,7 +367,12 @@ export default function CreateProjectForm() {
                 >
                   📁 Pilih File Gambar...
                 </label>
-                <span style={{ fontSize: "0.82rem", color: "rgba(232, 232, 232, 0.6)" }}>
+                <span
+                  style={{
+                    fontSize: "0.82rem",
+                    color: "rgba(232, 232, 232, 0.6)",
+                  }}
+                >
                   JPEG, PNG, WebP, AVIF (maks. 5 MB)
                 </span>
               </div>
@@ -495,7 +502,10 @@ export default function CreateProjectForm() {
                     border: "1px solid rgba(239, 68, 68, 0.2)",
                   }}
                 >
-                  ⚠️ URL yang Anda masukkan adalah tautan berbagi Google Drive / share.google. Tautan tersebut bukan direct image dan tidak akan tampil. Silakan unduh gambar dan unggah file langsung melalui tombol di atas.
+                  ⚠️ URL yang Anda masukkan adalah tautan berbagi Google Drive /
+                  share.google. Tautan tersebut bukan direct image dan tidak
+                  akan tampil. Silakan unduh gambar dan unggah file langsung
+                  melalui tombol di atas.
                 </p>
               )}
 
@@ -526,7 +536,12 @@ export default function CreateProjectForm() {
                       borderRadius: 6,
                     }}
                   />
-                  <span style={{ fontSize: "0.82rem", color: "rgba(232, 232, 232, 0.7)" }}>
+                  <span
+                    style={{
+                      fontSize: "0.82rem",
+                      color: "rgba(232, 232, 232, 0.7)",
+                    }}
+                  >
                     Preview Gambar dari URL Eksternal
                   </span>
                 </div>
@@ -580,7 +595,9 @@ export default function CreateProjectForm() {
               placeholder="https://myproject.vercel.app"
               style={inputStyle}
             />
-            <span style={hintStyle}>Opsional, tautan aplikasi yang berjalan.</span>
+            <span style={hintStyle}>
+              Opsional, tautan aplikasi yang berjalan.
+            </span>
           </label>
 
           {/* Tombol Aksi */}

@@ -234,13 +234,17 @@ export default function EditProjectForm({ project }: { project: ProjectRow }) {
               </span>
               <select
                 name="category"
-                defaultValue={values.category}
+                defaultValue={
+                  values.category === "website"
+                    ? "machine-learning"
+                    : values.category
+                }
                 disabled={isPending}
                 style={selectStyle}
               >
                 <option value="data-science">Data Science</option>
                 <option value="dashboard">Dashboard</option>
-                <option value="website">Website</option>
+                <option value="machine-learning">Machine Learning</option>
                 <option value="creative-branding">Creative Branding</option>
               </select>
               <span style={hintStyle}>Bidang proyek.</span>
@@ -273,7 +277,9 @@ export default function EditProjectForm({ project }: { project: ProjectRow }) {
               disabled={isPending}
               style={inputStyle}
             />
-            <span style={hintStyle}>Tampil pada kartu proyek di halaman utama.</span>
+            <span style={hintStyle}>
+              Tampil pada kartu proyek di halaman utama.
+            </span>
           </label>
 
           {/* Deskripsi Lengkap */}
@@ -311,7 +317,8 @@ export default function EditProjectForm({ project }: { project: ProjectRow }) {
                   margin: "0.25rem 0 0",
                 }}
               >
-                Ganti gambar dengan mengunggah file baru ke Supabase Storage, atau pertahankan gambar yang sedang digunakan.
+                Ganti gambar dengan mengunggah file baru ke Supabase Storage,
+                atau pertahankan gambar yang sedang digunakan.
               </p>
             </div>
 
@@ -459,9 +466,17 @@ export default function EditProjectForm({ project }: { project: ProjectRow }) {
                     transition: "all 0.2s ease",
                   }}
                 >
-                  📁 {hasExistingImage ? "Ganti dengan File Gambar Baru..." : "Pilih File Gambar..."}
+                  📁{" "}
+                  {hasExistingImage
+                    ? "Ganti dengan File Gambar Baru..."
+                    : "Pilih File Gambar..."}
                 </label>
-                <span style={{ fontSize: "0.82rem", color: "rgba(232, 232, 232, 0.6)" }}>
+                <span
+                  style={{
+                    fontSize: "0.82rem",
+                    color: "rgba(232, 232, 232, 0.6)",
+                  }}
+                >
                   JPEG, PNG, WebP, AVIF (maks. 5 MB)
                 </span>
               </div>
@@ -594,7 +609,10 @@ export default function EditProjectForm({ project }: { project: ProjectRow }) {
                     border: "1px solid rgba(239, 68, 68, 0.2)",
                   }}
                 >
-                  ⚠️ URL yang Anda masukkan adalah tautan berbagi Google Drive / share.google. Tautan tersebut bukan direct image dan tidak akan tampil. Silakan unduh gambar dan unggah file langsung melalui tombol di atas.
+                  ⚠️ URL yang Anda masukkan adalah tautan berbagi Google Drive /
+                  share.google. Tautan tersebut bukan direct image dan tidak
+                  akan tampil. Silakan unduh gambar dan unggah file langsung
+                  melalui tombol di atas.
                 </p>
               )}
             </div>
@@ -646,7 +664,9 @@ export default function EditProjectForm({ project }: { project: ProjectRow }) {
               placeholder="https://myproject.vercel.app"
               style={inputStyle}
             />
-            <span style={hintStyle}>Opsional, tautan aplikasi yang berjalan.</span>
+            <span style={hintStyle}>
+              Opsional, tautan aplikasi yang berjalan.
+            </span>
           </label>
 
           {/* Tombol Aksi */}

@@ -172,12 +172,18 @@ export default function CreateArticleForm() {
               <select
                 name="category"
                 required
-                defaultValue={values.category}
+                defaultValue={
+                  values.category === "politics" ||
+                  values.category === "public-policy" ||
+                  values.category === "public policy"
+                    ? "publications"
+                    : values.category
+                }
                 disabled={isPending}
                 style={inputStyle}
               >
                 <option value="education">education</option>
-                <option value="politics">politics</option>
+                <option value="publications">Publikasi</option>
                 <option value="data-science">data-science</option>
               </select>
             </label>

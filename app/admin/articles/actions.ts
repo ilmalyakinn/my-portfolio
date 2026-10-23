@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 
-const validCategories = new Set(["education", "politics", "data-science"]);
+const validCategories = new Set(["education", "publications", "data-science"]);
 
 export type ArticleFormValues = {
   slug: string;
@@ -73,11 +73,31 @@ function getFormValues(formData: FormData): ArticleFormValues {
   };
 }
 
+function normalizeStoredArticleCategory(category: string): string {
+  const normalized = category.trim().toLowerCase();
+
+  if (
+    normalized === "politics" ||
+    normalized === "public policy" ||
+    normalized === "public-policy" ||
+    normalized === "publication" ||
+    normalized === "publications" ||
+    normalized === "publikasi"
+  ) {
+    return "publications";
+  }
+
+  return normalized;
+}
+
 function validateArticleValues(values: ArticleFormValues): string | null {
+  const normalizedCategory = normalizeStoredArticleCategory(values.category);
+  values.category = normalizedCategory;
+
   if (!values.slug) return "Slug is required.";
 
   if (!values.category || !validCategories.has(values.category)) {
-    return "Category must be education, politics, or data-science.";
+    return "Category must be education, publications, or data-science.";
   }
 
   const hasTitle = values.title_id || values.title_en;
@@ -159,7 +179,7 @@ export async function createArticleAction(
       excerpt_en: values.excerpt_en || null,
       content_id: values.content_id || null,
       content_en: values.content_en || null,
-      category: values.category,
+      category: normalizeStoredArticleCategory(values.category),
       cover_image: values.cover_image || null,
       published_at: publishedAt,
     };
@@ -260,7 +280,7 @@ export async function updateArticleAction(
         excerpt_en: values.excerpt_en || null,
         content_id: values.content_id || null,
         content_en: values.content_en || null,
-        category: values.category,
+        category: normalizeStoredArticleCategory(values.category),
         cover_image: values.cover_image || null,
         published_at: publishedAt,
       })

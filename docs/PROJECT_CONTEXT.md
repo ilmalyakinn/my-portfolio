@@ -365,7 +365,7 @@ Kategori:
 
 ```text
 Pendidikan
-Politik
+Publikasi
 Data Science
 ```
 
@@ -373,7 +373,7 @@ Nilai internal yang direkomendasikan:
 
 ```text
 education
-politics
+publications
 data-science
 ```
 
@@ -716,7 +716,7 @@ Project hanya memiliki 4 kategori FIXED:
 ```text
 Data Science
 Dashboard
-Website
+Machine Learning
 Creative Branding Project
 ```
 
@@ -725,7 +725,7 @@ Nilai internal yang direkomendasikan:
 ```text
 data-science
 dashboard
-website
+machine-learning
 creative-branding
 ```
 
@@ -759,7 +759,7 @@ Filter:
 All
 Data Science
 Dashboard
-Website
+Machine Learning
 Creative Branding Project
 ```
 

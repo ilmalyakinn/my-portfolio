@@ -180,7 +180,7 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* 4. Front-End Web Development */}
+          {/* 4. Machine Learning */}
           <div className="service-item">
             <div className="service-icon">
               <svg
@@ -197,14 +197,15 @@ export default async function Home() {
               </svg>
             </div>
             <div className="service-content">
-              <h3 className="service-title">Front-End Web Development</h3>
+              <h3 className="service-title">Machine Learning</h3>
               <p className="service-desc">
-                As a web developer, I help design and build websites for
-                startups and freelancers. These websites are responsive and
-                optimized for desktop and smartphones.
+                I turn raw data into actionable insight by building machine
+                learning models, exploring patterns, and translating complex
+                signals into practical solutions for real-world problems.
               </p>
               <p className="service-tools">
-                <strong>Tools:</strong> HTML, CSS, JavaScript, PHP
+                <strong>Tools:</strong> Python, Pandas, Scikit-learn,
+                TensorFlow, NLP
               </p>
             </div>
           </div>

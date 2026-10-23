@@ -7,7 +7,7 @@ import { createSupabaseServerClient } from "@/lib/supabase-server";
 const validCategories = new Set([
   "data-science",
   "dashboard",
-  "website",
+  "machine-learning",
   "creative-branding",
 ]);
 
@@ -104,7 +104,20 @@ function isGoogleShareUrl(urlString: string): boolean {
   }
 }
 
+function normalizeStoredProjectCategory(category: string): string {
+  const normalized = category.trim().toLowerCase();
+
+  if (normalized === "website" || normalized === "machine learning") {
+    return "machine-learning";
+  }
+
+  return normalized;
+}
+
 function validateProjectValues(values: ProjectFormValues): string | null {
+  const normalizedCategory = normalizeStoredProjectCategory(values.category);
+  values.category = normalizedCategory;
+
   if (!values.title) {
     return "Judul proyek wajib diisi.";
   }
@@ -118,7 +131,7 @@ function validateProjectValues(values: ProjectFormValues): string | null {
   }
 
   if (!values.category || !validCategories.has(values.category)) {
-    return "Kategori harus dipilih dari: data-science, dashboard, website, atau creative-branding.";
+    return "Kategori harus dipilih dari: data-science, dashboard, machine-learning, atau creative-branding.";
   }
 
   if (values.year) {
@@ -261,7 +274,7 @@ export async function createProjectAction(
     const payload = {
       title: values.title,
       slug: values.slug,
-      category: values.category,
+      category: normalizeStoredProjectCategory(values.category),
       year: parsedYear,
       short_description: values.short_description,
       description: values.description || null,
@@ -397,7 +410,7 @@ export async function updateProjectAction(
       .update({
         title: values.title,
         slug: values.slug,
-        category: values.category,
+        category: normalizeStoredProjectCategory(values.category),
         year: parsedYear,
         short_description: values.short_description,
         description: values.description || null,
